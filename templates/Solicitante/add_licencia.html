@@ -1,0 +1,501 @@
+<style type="text/css">
+  #map {
+    height: 400px;
+    width: 100%;
+  }
+  #current{
+     padding-top: 25px;
+}
+</style>
+<div class="d-sm-flex align-items-center justify-content-between mb-4" ng-init="get_licenias()">
+  <h1 class="h3 mb-0 text-gray-800">Trámites</h1>
+  <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#validate_save" ng-click="val_save_lic()">
+    <i class="fas fa-download fa-sm text-white-50"></i> Guardar y Terminar</a>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="container">
+    <div class="row">
+      <div class="form-check col-6" ng-repeat="item in tramites_list">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios" ng-click="get_frm(item)" ng-model="lic">
+        <label class="form-check-label" for="exampleRadios">
+          {{item.tramite}}
+        </label>
+      </div>
+      <!-- A L E R T -->
+      <!--div ng-if="req_error"class="alert alert-{{kind}}" role="alert"> {{message}} </div-->
+      
+      <div class="col-12 p-3 accordion" id="accordionExample">
+        <div class="card card border-info" ng-repeat="item_group in grupo_list | filter:{ flag_view: '0'}">
+          <div class="card-header" id="heading{{$index}}">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-center text-black collapsed" type="button" data-toggle="collapse" data-target="#collapse{{$index}}" aria-expanded="false" aria-controls="collapse{{$index}}" ng-click="get_group_form(item_group)">{{item_group.nombre}}
+              </button>
+            </h2>
+          </div>
+          <div id="collapse{{$index}}" class="collapse" aria-labelledby="heading{{$index}}" data-parent="#accordionExample">
+            <div class="card-body">
+              <!--button type="button" class="btn btn-success btn-block" ng-click="add_form(form, item_group)">Guardar</button-->
+              <div class="alert alert-warning" role="alert">No olvides guardar antes de continuar.</div>
+              <form ng-if="item_group.public_id !== 'id_5ee7d14e6e4a79.01524533'"><!--gral datos-->
+                <div class="form-row">
+                  <!-- T E X T   I N P  U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '0'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input type="text" class="form-control" id="inputEmail4" ng-model="item.data" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- N U M B E R   I N P  U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '2'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input ng-if="item.public_id !== 'id_5ea3505b722463.97745423' && item.public_id != 'id_5ea3457c2e3ba5.81865549'" type="number" min="0" step="0.01" class="form-control" id="inputEmail4" ng-model="item.data" onkeypress="return alpha(event)">
+                    <!--input suma mtrs grp desc obra-->
+                    <input ng-if="item.public_id === 'id_5ea3505b722463.97745423'" type="number" class="form-control" id="inputEmail4" ng-model="item.data" disabled onkeypress="return alpha(event)">
+                    <!--Vigencia en dias -->
+                    <input ng-if="item.public_id === 'id_5ea3505b727e44.80590698' || item.public_id === 'id_5ea3457c2e3ba5.81865549'" type="number" min="0" step="30" class="form-control" id="inputEmail4" placeholder="30, 60, 90..." ng-model="item.data" onkeypress="return alpha(event)">
+                  </div>
+                  <!--D A T E   I N P U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '3'">
+                    <label ng-if="item.public_id != 'id_5ea3457c2e3ba5.81865547' && item.public_id != 'id_5ea3457c2e3ba5.81865548'" for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input ng-if="item.public_id != 'id_5ea3457c2e3ba5.81865547' && item.public_id != 'id_5ea3457c2e3ba5.81865548'" type="date" class="form-control" id="inputEmail4" ng-model="item.data" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- E M A I L   I N P U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '4'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input type="email" class="form-control" id="inputEmail4" ng-model="item.data" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- T E X T   A R E A  -->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '5'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <textarea class="form-control" aria-label="With textarea" ng-model="item.data" onkeypress="return alpha(event)"></textarea> 
+                  </div>
+                </div>
+              </form>
+              <!-- R A D I O  -   G R P .   L I C E N C I  A   P A R A -->
+              <div ng-if="item_group.public_id === 'id_5ee7d14e6e4a79.01524533'" class="col-6 form-check" ng-repeat="item in form">
+                <input ng-if="item.tipo_campo === '1'" class="form-check-input" type="radio" name="formRadios" id="formRadios" value=true ng-model="item.data" ng-click='clear_model(form, item)'>
+                <label ng-if="item.tipo_campo === '1'" class="form-check-label" for="formRadios"> {{item.nombre}} </label>
+              </div>
+              <div ng-if="req_error"class="alert alert-{{kind}}" role="alert"> {{message}} </div>
+              <button type="button" class="btn btn-success btn-block" ng-click="add_form(form, item_group)">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- M A P A -->
+      <div class="col-12 p-3">
+        <h6 ng-show="show_map">Ubicación del predio</h6>
+        <div ng-show="show_map" class="alert alert-warning col-12" role="alert">
+          Mover el marcador a la ubicación del predio.
+        </div>
+        <div ng-show="show_map" id="map"></div>
+      </div>
+      <!-- <div id="current">Nothing yet...</div> -->
+      <!--  -->
+      <div class="col-12 p-3" ng-if="show_aranceles">
+        <!-- alert -->
+        <div class="alert alert-info" role="alert"> Aranceles </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Buscar</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Arancel" aria-label="Arancel" aria-describedby="basic-addon1" ng-model="buscar">
+        </div>
+        <!-- tabla aranceles grales -->
+        <table class="table">
+          <thead class="thead-dark">
+            <th>Clave</th>
+            <th>Aranceles</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in aranceles_list | filter:buscar | startFrom:currentPage_ara*pageSize_ara | limitTo:pageSize_ara">
+              <td>{{item.tipo}}</td>
+              <td>{{item.nomas}}</td>
+              <td>{{item.unidad}}</td>
+              <td>{{item.precio | currency}}</td>
+              <td>
+                <!-- <input onkeypress="return omit_special_char(event)" type="number" ng-model="item.cantidad"> -->
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control"  aria-describedby="button-addon2" ng-model="item.cantidad" onkeypress="return alpha(event)">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" ng-click="add(item)">
+                      <svg class="bi bi-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot class="thead-dark">
+            <th>Clave</th>
+            <th>Aranceles</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+          </tfoot>
+        </table>
+      <!-- Paginado de tabla -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item {{currentPage_ara === 0 ? 'disabled' : ''}}">
+            <a class="page-link" ng-disabled="currentPage == 0" ng-click="cambio_ara(currentPage_ara-1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item {{num.numero === currentPage_ara ? 'active' : ''}}" ng-repeat="num in pageData_ara"><a class="page-link" ng-click="cambio_ara(num.numero)">{{num.numero+1}}</a></li>
+          <li class="page-item {{currentPage_ara === pages_ara-1 ? 'disabled' : ''}}">
+            <a class="page-link" ng-disabled="currentPage_ara == pages_ara-1" ng-click="cambio_ara(currentPage_ara+1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- totales aranceles -->
+      <div class="alert alert-info" role="alert">Total Aranceles Gral.</div>
+      <div class="col s12" style="width: 100%; height: 200px; overflow-y: scroll;">
+        <table class="table">
+          <thead class="thead-dark">
+            <th>Clave</th>
+            <th>Aranceles</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+            <th>Gestión</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in result">
+              <td>{{item.tipo}}</td>
+              <td>{{item.nomas}}</td>
+              <td>{{item.unidad}}</td>
+              <td>{{item.precio | currency}}</td>
+              <td>{{item.cantidad}}</td>
+              <td>{{item.total | currency}}</td>
+              <td>
+                <a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral($index,item)">
+                  <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+                <!--a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral($index)"><i class="material-icons pulse">clear</i></a>
+                  <a class="btn-floating  waves-effect btn-small btn blue" ng-click="edit_gral(item)"><i class="material-icons pulse">edit</i></a-->
+              </td>
+            </tr>
+          </tbody>
+          <tfood class="thead-dark">
+            <th>Clave</th>
+            <th>Aranceles</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+            <th>Gestión</th>
+          </tfood>
+        </table>
+      </div>
+      <div class="col s12">
+        <table>
+          <tr>
+            Total de la suma : {{result.total_gral | currency}}
+          </tr>
+        </table>
+      </div>
+
+      <!--//////////////  A R A N C E L E S   C O R R E S P O N S A B L E S  0//////////////////-->
+      <!-- alert -->
+      <div class="alert alert-info" role="alert"> Aranceles de Corresponsables </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value=true id="defaultCheck1" ng-model="corres_div">
+        <label class="form-check-label" for="defaultCheck1">
+          Requiere Corresponsables
+        </label>
+      </div>
+      <!-- aranceles Corresponsables -->
+      <div class="row" ng-if="corres_div">
+        <div class="alert alert-light col-12" role="alert" ng-repeat="item in corres_aras">
+          <button ng-click="del_ara_cor($index,item)"type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="tooltip" data-placement="top" title="Eliminar Arancel"> 
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <b>Especialidad.</b> {{item.especialidad}}  &nbsp;&nbsp;<b>Perito.</b>{{item.nombre}} <br>
+          <b>Aranceles Gral.</b> {{item.aranceles[[item.aranceles.length-1]]}}
+        </div>
+        <!-- especialidades -->
+        <div class="form-check col-3" ng-repeat="item in esp_list">
+          <button ng-if="item.btn_dis != false" type="button" class="btn btn-outline-success" ng-click="set_data(item,$index)">
+            {{item.descripcion}}
+          </button>
+        </div>
+        <div class="form-check col-3">
+          <button type="button" class="btn btn-outline-info btn-sm btn-block" ng-click="res_esp(0)">Restaurar</button>
+        </div>
+
+        <div class="alert alert-light col-12" role="alert"><b>{{corresponsable.nombre}}</b> Corresponsable en <b>{{especialidad.descripcion}}</b></div>
+
+        <!-- A L E R T   E R R O R -->
+        <div ng-if="cor_error" class="alert alert-{{kind_cor}} col-12" role="alert"><b>{{message_cor}}</b></div>
+        <!-- corresponsables -->
+        <div class="form-check col-3" ng-repeat="item in corres_list">
+          <div class="form-check" ng-if="item.btn_dis != false">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" ng-model="item.checked" ng-click="set_corres(item,$index)" onkeypress="return alpha(event)">
+            <label class="form-check-label" for="defaultCheck1">
+             {{item.nombre}}
+            </label>
+          </div>
+        </div>
+        <div class="form-check col-3">
+          <button type="button" class="btn btn-outline-info btn-sm btn-block" ng-click="res_usrs(0)">Restaurar</button>
+        </div>
+        <!-- tabla aranceles especialidades -->
+        <div ng-if="tbl_ara_cor_div" class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Buscar</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Arancel" aria-label="Arancel" aria-describedby="basic-addon1" ng-model="buscar_esp">
+          <button type="button" class="btn btn-success btn-block" ng-click="add_cor_ara()">Guardar Aranceles <b>{{especialidad.descripcion}}</b> de  Corresponsable <b>{{corresponsable.nombre}}</b></button>
+        </div>
+        <!-- tabla de aranceles de especialidades -->
+        <table ng-if="tbl_ara_cor_div" class="table">
+          <thead>
+            <th>Clave</th>
+            <th>Aranceles Cor.</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in aran_esp_list | filter:buscar_esp | startFrom:currentPage_ara*pageSize_ara | limitTo:pageSize_ara">
+              <td>{{item.tipo}}</td>
+              <td>{{item.nomas}}</td>
+              <td>{{item.unidad}}</td>
+              <td>{{item.precio | currency}}</td>
+              <td>
+                <!-- <input onkeypress="return omit_special_char(event)" type="number" ng-model="item.cantidad"> -->
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control"  aria-describedby="button-addon2" ng-model="item.cantidad">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" ng-click="add_corres(item)">
+                      <svg class="bi bi-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <th>Clave</th>
+            <th>Aranceles Cor.</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+          </tfoot>
+        </table>
+        <!-- total de aranceles de especialidades -->
+        <!-- totales aranceles corres -->
+        <div ng-if="tbl_ara_cor_div" class="alert alert-info col-12" role="alert">Total Aranceles Corresponsables</div>
+        <!-- total arancel esp -->
+        <div ng-if="tbl_ara_cor_div" class="col-12" style="width: 100%; height: 200px; overflow-y: scroll;">
+          <table class="table">
+            <thead class="thead-dark">
+              <th>Clave</th>
+              <th>Aranceles</th>
+              <th>Unidad</th>
+              <th>Costo</th>
+              <th>Cantidad</th>
+              <th>Importe</th>
+              <th>Gestión</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in cor_pre_result">
+                <td>{{item.tipo}}</td>
+                <td>{{item.nomas}}</td>
+                <td>{{item.unidad}}</td>
+                <td>{{item.precio | currency}}</td>
+                <td>{{item.cantidad}}</td>
+                <td>{{item.total | currency}}</td>
+                <td>
+                  <a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral_corres($index,item)">
+                    <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
+                    </svg>
+                  </a>
+                  <!--a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral($index)"><i class="material-icons pulse">clear</i></a>
+                    <a class="btn-floating  waves-effect btn-small btn blue" ng-click="edit_gral(item)"><i class="material-icons pulse">edit</i></a-->
+                </td>
+              </tr>
+            </tbody>
+            <tfood class="thead-dark">
+              <th>Clave</th>
+              <th>Aranceles Cor.</th>
+              <th>Unidad</th>
+              <th>Costo</th>
+              <th>Cantidad</th>
+              <th>Importe</th>
+              <th>Gestión</th>
+            </tfood>
+          </table>
+        </div>
+        <div ng-if="tbl_ara_cor_div" class="col-12">
+          <table>
+            <tr>
+              Total de la suma : {{cor_pre_result.total_gral | currency}}
+            </tr>
+          </table>
+        </div>
+      </div>
+      </div>
+      <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#validate_save" ng-click="val_save_lic()">
+        <i class="fas fa-download fa-sm text-white-50"></i> Guardar y Terminar</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  var map, infoWindow;
+  sessionStorage.setItem('__lat',  22.749486278701724);
+  sessionStorage.setItem('__lng',  -102.51347985214538);
+
+  function initMap() {
+    var pre_center = {lat: 22.749486278701724, lng: -102.51347985214538},
+    map = new google.maps.Map(document.getElementById('map'), {
+          center: pre_center,
+          zoom: 14
+        });
+    infoWindow = new google.maps.InfoWindow;
+
+
+    var marker = new google.maps.Marker({
+      position: pre_center,
+      map: map,
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      title: 'Ubicación del predio'
+    });
+
+    google.maps.event.addListener(marker, 'dragend', function(evt){
+      sessionStorage.setItem('__lat', evt.latLng.lat());
+      sessionStorage.setItem('__lng',  evt.latLng.lng());
+      // document.getElementById('current').innerHTML = '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) + ' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>';
+    });
+
+    google.maps.event.addListener(marker, 'dragstart', function(evt){
+        // document.getElementById('current').innerHTML = '<p>Currently dragging marker...</p>';
+    });
+
+    marker.addListener('click', toggleBounce);
+    marker.setMap(map);
+
+  }
+
+  function toggleBounce() {
+    if (marker.getAnimation() !== null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+  }
+
+  map.setCenter(marker.position);
+  marker.setMap(map);
+
+</script>
+
+
+<!-- M O D A L E S  -->
+<!-- Button trigger modal >
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+  Launch static backdrop modal
+</button-->
+
+<!-- Modal correponsable-->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Cambio de Corresponsable {{corresponsable.nombre}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Está apunto de <b>CAMBIAR CORRESPONSABLE {{corresponsable.nombre}}</b>.<br>
+        Está seguro de realizar esta acción.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="res_usrs(1)">Entendido Restaurar</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="add_cor_ara()">Guardar Aranceles Corres.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal especialidad-->
+<div class="modal fade" id="staticBackdrop_esp" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Cambio de Especialidad {{especialidad.descripcion}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Está apunto de <b>CAMBIAR ESPECIALIDAD {{especialidad.descripcion}}</b> por <b>NUEVA ESPECIALIDAD {{new_especialidad.descripcion}}</b><br>
+        Está seguro de realizar esta acción, se PERDERÁN los datos de los aranceles de corresponsable.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="res_esp(1)">Entendido Restaurar</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="add_cor_ara()">Guardar Aranceles Corres.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal guardar-->
+<div class="modal fade" id="validate_save" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Guardar Solicitud</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Esta apunto de terminar la solicitud, una vez enviados los datos estos no podrán ser corregidos, asegurece que los datos son correctos.
+        <div ng-if="req_error_save"class="alert alert-{{kind_save}}" role="alert">
+          {{message_save}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button ng-if="!btn_stat"type="button" class="btn btn-primary" disabled>Guardar</button>
+        <button ng-if="btn_stat"type="button" class="btn btn-primary" data-dismiss="modal" ng-click="save_gral()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQrEDwfJBAKkOkf8-U2hCB9A6Nr6J6HJs&callback=initMap" type="text/javascript"></script>
+
+<!-- Core theme JS-->
+<script src="../../js/scripts.js"></script>

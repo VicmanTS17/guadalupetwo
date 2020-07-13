@@ -1,0 +1,118 @@
+<!-- Page Heading  -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h6 class="h3 mb-0 text-gray-800">Colaboradores</h6>
+  <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i>Nuevo Usuario</a> -->
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-5">
+        <label for="inputPassword4">Nombre</label>
+        <input type="text" class="form-control" id="inputName" ng-model="name" onkeypress="return alpha(event)">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputPassword4">Iniciales</label>
+        <input type="text" class="form-control" id="inputName" ng-model="inicial" onkeypress="return alpha(event)">
+      </div>
+      <div class="form-group col-md-5">
+        <label for="inputEmail4">Correo</label>
+        <input type="email" class="form-control" id="inputEmail4" ng-model="email" onkeypress="return alpha(event)">
+      </div>
+    </div>
+    <!-- editing -->
+    <div class="form-group col-md-4" ng-if="editing">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-primary"  ng-click="val_datos(0)">Guardar</button>
+        <button type="button" class="btn btn-secondary"  ng-click="cancel()">Canelar</button>
+      </div>
+    </div>
+    <!-- save -->
+    <div class="form-group col-md-2" ng-if="!editing">
+      <button type="submit" class="btn btn-primary" ng-click="val_datos(1)">Guardar</button>
+    </div>
+  </form>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Listado de Usuarios</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Iniciales</th>
+              <th>Correo</th>
+              <th>Tipo Usuario</th>
+              <th>Fecha Registro</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Nombre</th>
+              <th>Iniciales</th>
+              <th>Correo</th>
+              <th>Tipo Usuario</th>
+              <th>Fecha Registro</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr ng-repeat = "item in users_list">
+              <td>
+                {{item.nombre}}
+                <!-- <label>{{item.departamento}}</label> -->
+              </td>
+              <td>{{item.iniciales}}</td>
+              <td>{{item.correo}}</td>
+              <td>{{item.desc_tipo_usuario}}</td>
+              <td>{{item.fecha_registro}}</td>
+              <td>{{item.estado === "1" ? "Activo" : "Suspendido"}}</td>
+              <td>
+                <!-- editar -->
+                <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="edit_usr(item)">
+                  <svg class="bi bi-pencil-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                  </svg>
+                </button>
+                <!-- suspencion -->
+                  <!-- suspender -->
+                <button ng-if="item.estado === '1'" type="button" class="btn btn-outline-secondary btn-sm" ng-click="est_usr(item)">
+                  <svg class="bi bi-unlock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M9.655 8H2.333c-.264 0-.398.068-.471.121a.73.73 0 0 0-.224.296 1.626 1.626 0 0 0-.138.59V14c0 .342.076.531.14.635.064.106.151.18.256.237a1.122 1.122 0 0 0 .436.127l.013.001h7.322c.264 0 .398-.068.471-.121a.73.73 0 0 0 .224-.296 1.627 1.627 0 0 0 .138-.59V9c0-.342-.076-.531-.14-.635a.658.658 0 0 0-.255-.237A1.122 1.122 0 0 0 9.655 8zm.012-1H2.333C.5 7 .5 9 .5 9v5c0 2 1.833 2 1.833 2h7.334c1.833 0 1.833-2 1.833-2V9c0-2-1.833-2-1.833-2zM8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                  </svg>
+                </button>
+                  <!-- activar -->
+                <button ng-if="item.estado === '0'" type="button" class="btn btn-outline-secondary btn-sm" ng-click="est_usr(item)">
+                  <svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="11" height="9" x="2.5" y="7" rx="2"/>
+                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Core theme JS-->
+<script src="../../js/scripts.js"></script>
+<!-- Page level plugins -->
+<!-- <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+
+<!-- Page level custom scripts -->
+<!-- <script src="../js/demo/datatables-demo.js"></script> -->

@@ -1,0 +1,50 @@
+<div class="card-header py-3"ng-init="get_pagos()">
+    <h6 class="m-0 font-weight-bold text-primary">Comprobantes de Pago. Folio. {{lic_data.id_licencia}} {{lic_data.tramite}}</h6>
+</div>
+<div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+</div>
+<!--ng repeat con resultado-->
+<div class="col-12">
+    <form>
+      <p class="h5">Comprobante de Pagos</p>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <div class="input-group">
+            <div class="custom-file">
+              <input  class="custom-file-input" id="validatedInputGroupCustomFile"  id="file-input" type="file" ng-model="file" base-sixty-four-input>
+              <label class="custom-file-label" for="validatedInputGroupCustomFile">{{file.filename}}</label>
+            </div>
+            <div class="input-group-append">
+               <button class="btn btn-outline-secondary" type="button" ng-click="val_file()">Enviar</button>
+            </div>
+          </div>
+          <a ng-if="item.bandera_carga === '1'" href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver</a>
+        </div>
+        <div class="form-group col-md-9">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" ng-model="pago_para">
+                <label class="custom-control-label" for="customSwitch1">Arancel / Derechos del Municipio</label>
+            </div>
+        </div>
+      </div>
+    </form>
+</div>
+<!---->
+<div class="col-12" ng-repeat="item in pagos_list">
+    <form>
+      <p class="h6">{{item.pago_para == 0 ? 'Comprobante Arancel' : 'Comprobante Derechos'}}</p>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="validationTextarea">Comentario - <small class="text-muted"><font color="red">{{item.estatus}}</font></small></label>
+          <textarea class="form-control" id="validationTextarea" ng-model="item.comentario" readonly></textarea>
+        </div>
+        <div class="form-group col-md-4"><br><br>
+          <p class="h6">{{item.nombre}} </p>
+          <a href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver</a>
+        </div>
+      </div>
+    </form>
+</div>
+<!-- form estatico ng-if="pagos_list.length == 0"-->
+

@@ -1,0 +1,42 @@
+<form name="perfil_form">
+    <div class="form-row">
+        <div ng-if=req_error class="alert alert-{{kind}} col-md-12" role="alert">
+            {{message}}
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Nombre</label>
+            <input type="text" class="form-control" id="inputName" ng-model="user_data.nombre" name="name"
+                ng-minlength="6" ng-maxlength="40" required onkeypress="return alpha(event)">
+            <span ng-show="perfil_form.name.$error.minlength">Nombre demasiado
+                corto</span>
+            <span ng-show="perfil_form.name.$error.maxlength">Nombre demasiado
+                largo</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" id="inputEmail" ng-model="user_data.correo" name="email" onkeypress="return alpha(event)">
+            <span ng-show="!perfil_form.email.$valid" class="helper-text">Anota un correo valido</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Contraseña</label>
+            <input type="password" class="form-control" id="inputPassword4" ng-model="user_data.contra" name="password"
+                ng-minlength="6" ng-maxlength="12" onkeypress="return alpha(event)">
+            <span ng-show="perfil_form.password.$error.minlength">contraseña demasiado
+                corta</span>
+            <span ng-show="perfil_form.password.$error.maxlength">contraseña demasiado
+                larga</span>
+        </div>
+        <div class="form-group col-md-6" ng-if="__jdflag">
+            <label for="inputUMA">Valor de UMA</label>
+            <input type="number" class="form-control" id="inputUMA" ng-model="user_data.uma" name="uma" step="0.01" min="0" onkeypress="return alpha(event)">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputUMA">Iniciales</label>
+            <input type="text" class="form-control" id="inputini" ng-model="user_data.iniciales" onkeypress="return alpha(event)">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="save_pro(user_data)">Guardar</button>
+</form>
+
+<!-- Core theme JS-->
+<script src="../../js/scripts.js"></script>

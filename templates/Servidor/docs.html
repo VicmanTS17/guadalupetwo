@@ -1,0 +1,73 @@
+<!--Pagos div   ng-init="get_pagos()"  ng-init="get_re_docs_lic()"-->
+<div class="d-sm-flex align-items-center justify-content-between mb-4" ng-init="get_docs()">
+    <h6 class="h6 mb-0 text-gray-800">Carga de documentos para solicitantes.</h6>
+</div>
+
+<div class="col-12">
+    <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+        {{message}}
+    </div>
+    <form>
+      <p class="h5">Documento / Acta</p>
+      <div class="form-row">
+        <div class="form-group col-12">
+          <div class="input-group">
+            <div class="custom-file">
+              <input  class="custom-file-input" id="validatedInputGroupCustomFile"  id="file-input" type="file" ng-model="file" base-sixty-four-input>
+              <label class="custom-file-label" for="validatedInputGroupCustomFile">{{file.filename}}</label>
+            </div>
+          </div> 
+        </div>
+
+        <div class="form-group col-md-8">
+            <label for="validationTextarea">Comentario</label>
+            <textarea class="form-control" id="validationTextarea" ng-model="comentario"></textarea>
+        </div>
+        <!--div class="form-group col-md-3"><br><br>
+            <p class="h6">{{item.nombre}} </p>
+            <a href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver</a>
+        </div-->
+
+        <div class="form-group col-md-4">
+            <br>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" ng-model="doc_para">
+                <label class="custom-control-label" for="customSwitch1">Para DRO / Para Particular</label>
+            </div>
+            <button class="btn btn-outline-primary btn-block" type="button" ng-click="val_file()">Enviar</button>
+        </div>
+        <div class="input-group-append">
+            
+         </div>
+      </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div ng-if="notif_pay" class="alert alert-{{kind}}" role="alert">
+          {{message}}
+        </div>
+        <div class="col-12" ng-repeat="item in pagos_list">
+          <form>
+            <p class="h6">{{item.doc_para == 0 ? 'Doc. / Acta para DRO' : 'Doc. / Acta para Particular'}}</p>
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label for="validationTextarea">Comentario<small class="text-muted"></small></label>
+                <textarea class="form-control" id="validationTextarea" ng-model="item.comentario"></textarea>
+                
+              </div>
+              <div class="form-group col-md-4"><br>
+                <button type="button" class="btn btn-outline-success btn-sm btn-block" ng-click="add_coment_doc(item)">Guardar Comentario</button>
+                <a href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver {{item.nombre}}</a>
+                <!-- suspencion -->
+                  <!-- suspender -->
+                <button ng-if="item.estatus == '1'" type="button" class="btn btn-outline-secondary btn-sm btn-block" ng-click="est_doc(item)"> Ocultar </button>
+                  <!-- activar -->
+                <button ng-if="item.estatus == '0'" type="button" class="btn btn-outline-secondary btn-sm btn-block" ng-click="est_doc(item)"> Mostrar </button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>

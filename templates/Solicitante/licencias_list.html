@@ -1,0 +1,208 @@
+<!-- Page Heading  -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Licencias</h1>
+  <a ng-if="__solflag" href="#!add_lic" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Nueva Solicitud</a>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Listado de folios</h6>
+    </div>
+    <div class="card-body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">
+            <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+              <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+            </svg>
+          </span>
+        </div>
+        <input type="text" class="form-control" placeholder="Buscar" ng-model="buscar" aria-describedby="basic-addon1">
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>Calle</th>
+              <th>Colonia</th>
+              <th>Lic. para</th>
+              <th>Aranceles</th>
+              <th>Arancel Colegio</th>
+              <th>Fecha Actualización</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Folio</th>
+              <th>Calle</th>
+              <th>Colonia</th>
+              <th>Lic. para</th>
+              <th>Aranceles</th>
+              <th>Arancel Col.</th>
+              <th>Fecha Actualización</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr ng-repeat = "item in licencias_list | filter:buscar | startFrom:currentPage_lic*pageSize_lic | limitTo:pageSize_lic">
+              <td>{{item.id_licencia}}</td>
+              <td>{{item.calle}}</td>
+              <td>{{item.colonia}}</td>
+              <td>
+                {{item.tramite}} | 
+                <p style="color:red"> {{item.obra_nueva     === "true" ? "Obra Nueva" : ""}}
+                {{item.ampliacion     === "true" ? "Ampliación" : ""}}
+                {{item.modificacion   === "true" ? "Modificación" : ""}}
+                {{item.reparacion     === "true" ? "Reparación" : ""}}
+                {{item.regularizacion === "true" ? "Regularización" : ""}}
+                {{item.obra_minima    === "true" ? "Obra Mínima" : ""}}
+                {{item.demolicion     === "true" ? "Demolición" : ""}}
+                {{item.renovacion     === "true" ? "Renovación" : ""}}
+                {{item.bardeo         === "true" ? "Bardeo Perimetral" : ""}}</p>
+              </td>
+              <td>{{item.total_ara | currency}}</td>
+              <td>{{item.arancel_col | currency}}</td>
+              <td>{{item.ultima_act}}</td>
+              <td>{{item.estatus}}</td>
+              <td>
+                <!-- upload -->
+                <a role="button" class="btn btn-outline-secondary btn-sm" ng-click="set_session(item)" data-toggle="tooltip" data-placement="top" title="Cargar Docs." href="#!add_docs">
+                  <svg class="bi bi-upload" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8zM5 4.854a.5.5 0 00.707 0L8 2.56l2.293 2.293A.5.5 0 1011 4.146L8.354 1.5a.5.5 0 00-.708 0L5 4.146a.5.5 0 000 .708z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 2a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 2z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+                <!-- search -->
+                <!--button type="button" class="btn btn-outline-secondary btn-sm">
+                  <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                  </svg>
+                </button-->
+                <!-- Solicitud -->
+                <button ng-if="item.estatus != 'Licencia para Firma' && item.estatus != 'Licencia Autorizada'" type="button" class="btn btn-outline-secondary btn-sm" ng-click="solicitud(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Solicitud">
+                  <svg class="bi bi-file-text" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+                <!-- Licencia sin firma-->
+                <a ng-if="item.estatus == 'Licencia para Firma' || item.estatus == 'Firma DRO' || item.estatus == 'Firma Municipio'" type="button" class="btn btn-outline-secondary btn-sm" ng-click="licencia(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Licencia">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-spellcheck" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8.217 11.068c1.216 0 1.948-.869 1.948-2.31v-.702c0-1.44-.727-2.305-1.929-2.305-.742 0-1.328.347-1.499.889h-.063V3.983h-1.29V11h1.27v-.791h.064c.21.532.776.86 1.499.86zm-.43-1.025c-.66 0-1.113-.518-1.113-1.28V8.12c0-.825.42-1.343 1.098-1.343.684 0 1.075.518 1.075 1.416v.45c0 .888-.386 1.401-1.06 1.401zm-5.583 1.035c.767 0 1.201-.356 1.406-.737h.059V11h1.216V7.519c0-1.314-.947-1.783-2.11-1.783C1.355 5.736.75 6.42.69 7.27h1.216c.064-.323.313-.552.84-.552.527 0 .864.249.864.771v.464H2.346C1.145 7.953.5 8.568.5 9.496c0 .977.693 1.582 1.704 1.582zm.42-.947c-.44 0-.845-.235-.845-.718 0-.395.269-.684.84-.684h.991v.538c0 .503-.444.864-.986.864zm8.897.567c-.577-.4-.9-1.088-.9-1.983v-.65c0-1.42.894-2.338 2.305-2.338 1.352 0 2.119.82 2.139 1.806h-1.187c-.04-.351-.283-.776-.918-.776-.674 0-1.045.517-1.045 1.328v.625c0 .468.121.834.343 1.067l-.737.92z"/>
+                    <path fill-rule="evenodd" d="M14.469 9.414a.75.75 0 0 1 .117 1.055l-4 5a.75.75 0 0 1-1.116.061l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.908 1.907 3.476-4.346a.75.75 0 0 1 1.055-.117z"/>
+                  </svg>
+                </a>
+                <!-- Licencia aurotizada-->
+                <a ng-if="item.estatus == 'Licencia Autorizada'" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="PDF Licencia Autorizada" href="{{item.path_lic_firma}}" target="_blank">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-spellcheck" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8.217 11.068c1.216 0 1.948-.869 1.948-2.31v-.702c0-1.44-.727-2.305-1.929-2.305-.742 0-1.328.347-1.499.889h-.063V3.983h-1.29V11h1.27v-.791h.064c.21.532.776.86 1.499.86zm-.43-1.025c-.66 0-1.113-.518-1.113-1.28V8.12c0-.825.42-1.343 1.098-1.343.684 0 1.075.518 1.075 1.416v.45c0 .888-.386 1.401-1.06 1.401zm-5.583 1.035c.767 0 1.201-.356 1.406-.737h.059V11h1.216V7.519c0-1.314-.947-1.783-2.11-1.783C1.355 5.736.75 6.42.69 7.27h1.216c.064-.323.313-.552.84-.552.527 0 .864.249.864.771v.464H2.346C1.145 7.953.5 8.568.5 9.496c0 .977.693 1.582 1.704 1.582zm.42-.947c-.44 0-.845-.235-.845-.718 0-.395.269-.684.84-.684h.991v.538c0 .503-.444.864-.986.864zm8.897.567c-.577-.4-.9-1.088-.9-1.983v-.65c0-1.42.894-2.338 2.305-2.338 1.352 0 2.119.82 2.139 1.806h-1.187c-.04-.351-.283-.776-.918-.776-.674 0-1.045.517-1.045 1.328v.625c0 .468.121.834.343 1.067l-.737.92z"/>
+                    <path fill-rule="evenodd" d="M14.469 9.414a.75.75 0 0 1 .117 1.055l-4 5a.75.75 0 0 1-1.116.061l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.908 1.907 3.476-4.346a.75.75 0 0 1 1.055-.117z"/>
+                  </svg>
+                </a>
+                <!--- Aranceles de pago -->
+                <!-- V E R   P D F -->
+                <a ng-if="item.is_per == '1' && item.is_ara == 1" role="button" class="btn btn-outline-secondary btn-sm" ng-click="arancel(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Aranceles">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bookshelf" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2.5 0a.5.5 0 0 1 .5.5V2h10V.5a.5.5 0 0 1 1 0v15a.5.5 0 0 1-1 0V15H3v.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zM3 14h10v-3H3v3zm0-4h10V7H3v3zm0-4h10V3H3v3z"/>
+                  </svg>
+                </a>
+                <!--- Orden de pago -->
+                <!-- V E R   P D F -->
+                <a ng-if="item.is_der == '1'" role="button" class="btn btn-outline-secondary btn-sm" ng-click="orden(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Orden de Pago">
+                  <svg class="bi bi-book" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M3.214 1.072C4.813.752 6.916.71 8.354 2.146A.5.5 0 0 1 8.5 2.5v11a.5.5 0 0 1-.854.354c-.843-.844-2.115-1.059-3.47-.92-1.344.14-2.66.617-3.452 1.013A.5.5 0 0 1 0 13.5v-11a.5.5 0 0 1 .276-.447L.5 2.5l-.224-.447.002-.001.004-.002.013-.006a5.017 5.017 0 0 1 .22-.103 12.958 12.958 0 0 1 2.7-.869zM1 2.82v9.908c.846-.343 1.944-.672 3.074-.788 1.143-.118 2.387-.023 3.426.56V2.718c-1.063-.929-2.631-.956-4.09-.664A11.958 11.958 0 0 0 1 2.82z"/>
+                    <path fill-rule="evenodd" d="M12.786 1.072C11.188.752 9.084.71 7.646 2.146A.5.5 0 0 0 7.5 2.5v11a.5.5 0 0 0 .854.354c.843-.844 2.115-1.059 3.47-.92 1.344.14 2.66.617 3.452 1.013A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.276-.447L15.5 2.5l.224-.447-.002-.001-.004-.002-.013-.006-.047-.023a12.582 12.582 0 0 0-.799-.34 12.96 12.96 0 0 0-2.073-.609zM15 2.82v9.908c-.846-.343-1.944-.672-3.074-.788-1.143-.118-2.387-.023-3.426.56V2.718c1.063-.929 2.631-.956 4.09-.664A11.956 11.956 0 0 1 15 2.82z"/>
+                  </svg>
+                </a>
+                <!-- comprobantes de pago -->
+                <a ng-if="item.is_der == '1' || item.is_ara == '1'" role="button" class="btn btn-outline-secondary btn-sm" ng-click="set_session(item)" data-toggle="tooltip" data-placement="top" title="Comprobante Pago" href="#!add_pagos">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M15 4H1v8h14V4zM1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1z"/>
+                    <path d="M13 4a2 2 0 0 0 2 2V4h-2zM3 4a2 2 0 0 1-2 2V4h2zm10 8a2 2 0 0 1 2-2v2h-2zM3 12a2 2 0 0 0-2-2v2h2zm7-4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+                  </svg>
+                </a>
+                <!-- cancelacion -->
+                <a role="button" class="btn btn-outline-secondary btn-sm" ng-click="set_session(item); pre_cancel()" data-toggle="modal" data-target="#config_cancel">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Paginado de tabla -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item {{currentPage_lic === 0 ? 'disabled' : ''}}">
+              <a class="page-link" ng-disabled="currentPage == 0" ng-click="cambio_lic(currentPage_lic-1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item {{num.numero === currentPage_lic ? 'active' : ''}}" ng-repeat="num in pageData_lic"><a class="page-link" ng-click="cambio_lic(num.numero)">{{num.numero+1}}</a></li>
+            <li class="page-item {{currentPage_lic === pages_lic-1 ? 'disabled' : ''}}">
+              <a class="page-link" ng-disabled="currentPage_lic == pages_lic-1" ng-click="cambio_lic(currentPage_lic+1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal guardar-->
+<div class="modal fade" id="config_cancel" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Cancelar Solicitud con Folio. {{lic_data.id_licencia}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        <div class="alert alert-danger" role="alert">
+          Está apunto de cancelar la solicitud {{lic_data.id_licencia}} {{lic_data.tramite}} | 
+          <label style="color:red"> {{lic_data.obra_nueva     === "true" ? "Obra Nueva" : ""}}
+          {{lic_data.ampliacion     === "true" ? "Ampliación" : ""}}
+          {{lic_data.modificacion   === "true" ? "Modificación" : ""}}
+          {{lic_data.reparacion     === "true" ? "Reparación" : ""}}
+          {{lic_data.regularizacion === "true" ? "Regularización" : ""}}
+          {{lic_data.obra_minima    === "true" ? "Obra Mínima" : ""}}
+          {{lic_data.demolicion     === "true" ? "Demolición" : ""}}
+          {{lic_data.renovacion     === "true" ? "Renovación" : ""}}
+          {{lic_data.bardeo         === "true" ? "Bardeo Perimetral" : ""}}</label>,
+          una vez que lo cancele este no podrá ser restaurado, para continuar debe ingresar su contraseña.
+        </div>
+        <div ng-if="notif_can" class="alert alert-{{kind}}" role="alert">
+          {{msj}}
+        </div>
+        <input type="password" class="form-control" placeholder="Contraseña" ng-model="contra" aria-describedby="basic-addon1" onkeypress="return alpha(event)">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" ng-click="val_pass(lic_data)">Guardar</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/scripts.js"></script>
+
+<!-- Page level plugins -->
+<!-- <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->

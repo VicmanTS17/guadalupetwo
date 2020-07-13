@@ -1,0 +1,133 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4" ng-init="get_derechos()">
+  <h6 class="h3 mb-0 text-gray-800">Derechos</h6>
+  <h6>Folio. {{lic_data.id_licencia}}, {{lic_data.tramite}}</h6>
+  <a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" ng-click="save_gral()"><i class="fas fa-download fa-sm text-white-50"></i> Guardar y Terminar</a>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+
+  <div class="col-12 p-3">
+        <h6>Derechos</h6>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Buscar</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Derecho" aria-label="Arancel" aria-describedby="basic-addon1" ng-model="buscar">
+        </div>
+
+        <table class="table">
+          <thead class="thead-dark">
+            <th>Clave</th>
+            <th>Concepto</th>
+            <th>Unidad</th>
+            <th>UMA</th>
+            <th>Costo</th>
+            <th>Gestión</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in derechos_list | filter:buscar | startFrom:currentPage_ara*pageSize_ara | limitTo:pageSize_ara">
+              <td>{{item.id_derecho}}</td>
+              <td>{{item.concepto}}</td>
+              <td>{{item.unidad}}</td>
+              <td>{{item.costo}}</td>
+              <td>{{item.precio | currency}}</td>
+              <td>
+                <!-- <input onkeypress="return omit_special_char(event)" type="number" ng-model="item.cantidad"> -->
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control"  aria-describedby="button-addon2" ng-model="item.cantidad">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" ng-click="add(item)">
+                      <svg class="bi bi-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot class="thead-dark">
+            <th>Clave</th>
+            <th>Concepto</th>
+            <th>Unidad</th>
+            <th>UMA</th>
+            <th>Costo</th>
+            <th>Gestión</th>
+          </tfoot>
+        </table>
+      <!-- Paginado de tabla -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item {{currentPage_ara === 0 ? 'disabled' : ''}}">
+            <a class="page-link" ng-disabled="currentPage == 0" ng-click="cambio_ara(currentPage_ara-1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item {{num.numero === currentPage_ara ? 'active' : ''}}" ng-repeat="num in pageData_ara"><a class="page-link" ng-click="cambio_ara(num.numero)">{{num.numero+1}}</a></li>
+          <li class="page-item {{currentPage_ara === pages_ara-1 ? 'disabled' : ''}}">
+            <a class="page-link" ng-disabled="currentPage_ara == pages_ara-1" ng-click="cambio_ara(currentPage_ara+1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- totales aranceles -->
+      <h6>Total Derechos</h6>
+      <div class="col s12 divider"></div>
+      <div class="col s12" style="width: 100%; height: 200px; overflow-y: scroll;">
+        <table class="table">
+          <thead class="thead-dark">
+            <th>Clave</th>
+            <th>Concepto</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+            <th>Gestión</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in result">
+              <td>{{item.clave}}</td>
+              <td>{{item.concepto}}</td>
+              <td>{{item.unidad}}</td>
+              <td>{{item.costo | currency}}</td>
+              <td>{{item.cantidad}}</td>
+              <td>{{item.total | currency}}</td>
+              <td>
+                <a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral($index,item)">
+                  <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+                <!--a class="btn-floating  waves-effect btn-small btn red" ng-click="remove_gral($index)"><i class="material-icons pulse">clear</i></a>
+                  <a class="btn-floating  waves-effect btn-small btn blue" ng-click="edit_gral(item)"><i class="material-icons pulse">edit</i></a-->
+              </td>
+            </tr>
+          </tbody>
+          <tfood class="thead-dark">
+            <th>Clave</th>
+            <th>Concepto</th>
+            <th>Unidad</th>
+            <th>Costo</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+            <th>Gestión</th>
+          </tfood>
+        </table>
+      </div>
+      <div class="col s12">
+        <table>
+          <tr>
+            Total de la suma : {{result.total_gral | currency}}
+          </tr>
+        </table>
+      </div>
+      </div>
+</div>

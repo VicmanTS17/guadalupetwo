@@ -1,0 +1,28 @@
+<!--Pagos div-->
+<div class="d-sm-flex align-items-center justify-content-between mb-4" ng-init="get_re_docs_lic()">
+  <h6 class="h3 mb-0 text-gray-800">Revisión de Pagos</h6>
+  <h6>Folio. {{lic_data.id_licencia}}, {{lic_data.tramite}}</h6>
+</div>
+<div class="card" ng-init="get_pagos()">
+    <div class="card-body">
+      <div ng-if="notif_pay" class="alert alert-{{kind}}" role="alert">
+        {{message}}
+      </div>
+      <div class="col-12" ng-repeat="item in pagos_list">
+        <form>
+          <p class="h6">{{item.pago_para == 0 ? '' : 'Comprobante de pago Derechos'}}</p>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="validationTextarea">Comentario - <small class="text-muted"><font color="red">{{item.estatus}}</font></small></label>
+              <textarea class="form-control" id="validationTextarea" ng-model="item.comentario"></textarea>
+              <button type="button" class="btn  btn-outline-success btn-sm btn-block" ng-click="add_coment_pay(item)">Guardar</button>
+            </div>
+            <div class="form-group col-md-4"><br><br>
+              <p class="h6">{{item.nombre}} </p>
+              <a href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

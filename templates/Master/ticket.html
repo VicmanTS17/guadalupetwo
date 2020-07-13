@@ -1,0 +1,115 @@
+<link href="css/style_ticket.css" rel="stylesheet" />
+<div class="chat-container clearfix" ng-init="gettickets()">
+  <div class="people-list" id="people-list">
+    <div class="search">
+      <input type="text" placeholder="search" />
+      <i class="fa fa-search"></i>
+    </div>
+    <ul class="list">
+      <li class="clearfix" ng-repeat="p in problemas">
+        <img src="https://guadalupe.licenciaszac.net/public_files/user_assets/{{p.path_imagen}}" alt="sin imagen del problema" width="100px" height="100px" ng-click="getmsn(p)"/>
+        <button ng-if="p.estado === '1'" type="button" class="btn btn-outline-danger" ng-click="closeTicket(p.public_id)">cerrar</button>
+        <span ng-if="p.estado === '0'">CERRADO</span>
+        <div class="about">
+          <div class="status">
+            {{p.asunto}}<br>
+            {{p.fecha}}
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="chat">
+    <div class="chat-header clearfix">
+      <img src="https://guadalupe.licenciaszac.net/public_files/user_assets/{{imagen}}" alt="sin imagen del problema" width="150px" height="150px"/>
+      <div class="chat-about">
+        <div class="chat-with">{{asunto}}</div>
+        <div class="chat-num-messages">{{fecha}}</div>
+      </div>
+      <!--button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Nuevo Ticket
+      </button-->
+    </div> <!-- end chat-header -->
+    <div class="chat-history">
+      <ul ng-repeat="m in mensajes">
+        <li ng-if="m.tipo_usuario !== 'id_5ebafdbc81b415.25700817'">
+          <div class="message-data">
+            <span class="message-data-name"><i class="fa fa-circle online"></i> {{m.nombre}}</span>
+            <span class="message-data-time">{{m.fecha}}</span>
+          </div>
+          <div class="message my-message">
+            {{m.mensaje}}
+          </div>
+        </li>
+        <li ng-if="m.tipo_usuario === 'id_5ebafdbc81b415.25700817'" class="clearfix">
+          <div class="message-data align-right">
+            <span class="message-data-time">{{m.fecha}}</span> &nbsp; &nbsp;
+            <span class="message-data-name">SOPORTE</span> <i class="fa fa-circle me"></i>
+          </div>
+          <div class="message other-message float-right">
+            {{m.mensaje}}
+          </div>
+        </li>
+        <!-- li class="clearfix">
+          <div class="message-data align-right">
+            <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp;
+            <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
+          </div>
+          <div class="message other-message float-right">
+            Hi Vincent, how are you? How is the project coming along?
+          </div>
+        </li>
+        <li>
+          <div class="message-data">
+            <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+            <span class="message-data-time">10:12 AM, Today</span>
+          </div>
+          <div class="message my-message">
+            Are we meeting today? Project has been already finished and I have results to show you.
+          </div>
+        </li -->
+      </ul>
+    </div> <!-- end chat-history -->
+    <div class="chat-message clearfix">
+      <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3" ng-model="msj"></textarea>
+      <button ng-click="sendmsn()">ENVIAR</button>
+    </div> <!-- end chat-message -->
+  </div> <!-- end chat -->
+</div> <!-- end container -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Nuevo Ticket</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="problema">Problema</label>
+            <input type="text" class="form-control" id="problema" ng-model="ticket.asunto">
+          </div>
+          <div class="form-group">
+            Agrega una imagen del problema
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" ng-model="file" base-sixty-four-input>
+              <label class="custom-file-label" for="inputGroupFile01">{{file.filename}}</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Detalles del Problema</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" ng-model="ticket.descripcion"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" ng-click="createTicket()" data-dismiss="modal">Enviar Ticket</button>
+      </div>
+    </div>
+  </div>
+</div>

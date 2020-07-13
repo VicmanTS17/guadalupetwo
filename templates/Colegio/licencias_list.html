@@ -1,0 +1,130 @@
+<!-- Page Heading  -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Licencias</h1>
+  <!-- <a href="#!add_lic" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Nueva Solicitud</a> -->
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Listado de Folios</h6>
+    </div>
+    <div class="card-body">
+      <input type="text" class="form-control" placeholder="Buscar" ng-model="buscar" aria-describedby="basic-addon1">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>Solicitante</th>
+              <th>Calle</th>
+              <th>Colonia</th>
+              <th>Lic. para</th>
+              <th>m2</th>
+              <th>Aranceles</th>
+              <th>Cuota Colegio</th>
+              <th>Fecha</th>
+              <th>Gestión</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Folio</th>
+              <th>Solicitante</th>
+              <th>Calle</th>
+              <th>Colonia</th>
+              <th>Lic. para</th>
+              <th>m2</th>
+              <th>Aranceles</th>
+              <th>Cuota Colegio</th>
+              <th>Fecha</th>
+              <th>Gestión</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr ng-repeat = "item in licencias_list | filter:buscar | startFrom:currentPage_lic*pageSize_lic | limitTo:pageSize_lic">
+              <td>{{item.id_licencia}}</td>
+              <td>{{item.solicitante}}</td>
+              <td>{{item.calle}}</td>
+              <td>{{item.colonia}}</td>
+              <td>
+                {{item.tramite}} | 
+                <p style="color:red"> {{item.obra_nueva     === "true" ? "Obra Nueva" : ""}}
+                {{item.ampliacion     === "true" ? "Ampliación" : ""}}
+                {{item.modificacion   === "true" ? "Modificación" : ""}}
+                {{item.reparacion     === "true" ? "Reparación" : ""}}
+                {{item.regularizacion === "true" ? "Regularización" : ""}}</p>
+              </td>
+              <td>{{item.suma_sup}}</td>
+              <td>{{item.total_ara | currency}}</td>
+              <td>{{item.arancel_col | currency}}</td>
+              <td>{{item.ultima_act}}</td>
+              <td>
+                <!-- upload -->
+                <!--a role="button" class="btn btn-outline-secondary btn-sm" href="#!add_docs" ng-click="set_session(item)">
+                  <svg class="bi bi-upload" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8zM5 4.854a.5.5 0 00.707 0L8 2.56l2.293 2.293A.5.5 0 1011 4.146L8.354 1.5a.5.5 0 00-.708 0L5 4.146a.5.5 0 000 .708z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 2a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 2z" clip-rule="evenodd"/>
+                  </svg>
+                </a-->
+                <!-- search -->
+                <a type="button" class="btn btn-outline-secondary btn-sm" href="#!ver_pagos" ng-click="set_session(item)">
+                  <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+                <!-- Solicitud -->
+                <!--a type="button" class="btn btn-outline-secondary btn-sm" ng-click="solicitud(item.public_id)">
+                  <svg class="bi bi-file-text" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                  </svg>
+                </a-->
+                <!-- ordenes de pago -->
+                  <!-- generacion -->
+                <!--a ng-if="item.is_der == '0'" role="button" class="btn btn-outline-secondary btn-sm" href="#!add_der" ng-click="set_session(item)">
+                  <svg class="bi bi-list-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 01.5-.5h9a.5.5 0 010 1h-9a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h9a.5.5 0 010 1h-9a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h9a.5.5 0 010 1h-9a.5.5 0 01-.5-.5zM3.854 2.146a.5.5 0 010 .708l-1.5 1.5a.5.5 0 01-.708 0l-.5-.5a.5.5 0 11.708-.708L2 3.293l1.146-1.147a.5.5 0 01.708 0zm0 4a.5.5 0 010 .708l-1.5 1.5a.5.5 0 01-.708 0l-.5-.5a.5.5 0 11.708-.708L2 7.293l1.146-1.147a.5.5 0 01.708 0zm0 4a.5.5 0 010 .708l-1.5 1.5a.5.5 0 01-.708 0l-.5-.5a.5.5 0 01.708-.708l.146.147 1.146-1.147a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                  </svg>
+                </a-->
+                  <!-- V E R   P D F -->
+                <!--a ng-if="item.is_der == '1'" role="button" class="btn btn-outline-secondary btn-sm" href="#!add_der" ng-click="set_session(item)">
+                  <svg class="bi bi-book" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M3.214 1.072C4.813.752 6.916.71 8.354 2.146A.5.5 0 0 1 8.5 2.5v11a.5.5 0 0 1-.854.354c-.843-.844-2.115-1.059-3.47-.92-1.344.14-2.66.617-3.452 1.013A.5.5 0 0 1 0 13.5v-11a.5.5 0 0 1 .276-.447L.5 2.5l-.224-.447.002-.001.004-.002.013-.006a5.017 5.017 0 0 1 .22-.103 12.958 12.958 0 0 1 2.7-.869zM1 2.82v9.908c.846-.343 1.944-.672 3.074-.788 1.143-.118 2.387-.023 3.426.56V2.718c-1.063-.929-2.631-.956-4.09-.664A11.958 11.958 0 0 0 1 2.82z"/>
+                    <path fill-rule="evenodd" d="M12.786 1.072C11.188.752 9.084.71 7.646 2.146A.5.5 0 0 0 7.5 2.5v11a.5.5 0 0 0 .854.354c.843-.844 2.115-1.059 3.47-.92 1.344.14 2.66.617 3.452 1.013A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.276-.447L15.5 2.5l.224-.447-.002-.001-.004-.002-.013-.006-.047-.023a12.582 12.582 0 0 0-.799-.34 12.96 12.96 0 0 0-2.073-.609zM15 2.82v9.908c-.846-.343-1.944-.672-3.074-.788-1.143-.118-2.387-.023-3.426.56V2.718c1.063-.929 2.631-.956 4.09-.664A11.956 11.956 0 0 1 15 2.82z"/>
+                  </svg>
+                </a-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Paginado de tabla -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item {{currentPage_lic === 0 ? 'disabled' : ''}}">
+              <a class="page-link" ng-disabled="currentPage == 0" ng-click="cambio_lic(currentPage_lic-1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item {{num.numero === currentPage_lic ? 'active' : ''}}" ng-repeat="num in pageData_lic"><a class="page-link" ng-click="cambio_lic(num.numero)">{{num.numero+1}}</a></li>
+            <li class="page-item {{currentPage_lic === pages_lic-1 ? 'disabled' : ''}}">
+              <a class="page-link" ng-disabled="currentPage_lic == pages_lic-1" ng-click="cambio_lic(currentPage_lic+1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page level plugins -->
+<!-- <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->

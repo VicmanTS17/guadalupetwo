@@ -1,0 +1,6 @@
+.htaccess
+/public_files
+/assets
+/lib
+/vendor
+.vscode

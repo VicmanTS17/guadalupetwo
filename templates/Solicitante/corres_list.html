@@ -1,0 +1,111 @@
+<!-- Page Heading  -->
+<div ng-init="get_lic_cor()" class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Licencias Corresponsable</h1>
+</div>
+  
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+      {{message}}
+    </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Listado de folios de corresponsable</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Folio</th>
+                <th>Calle</th>
+                <th>Colonia</th>
+                <th>Lic. para</th>
+                <th>Aranceles</th>
+                <th>Arancel Col.</th>
+                <th>Fecha Actualización</th>
+                <th>Estado</th>
+                <!--th>Gestión</th-->
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Folio</th>
+                <th>Calle</th>
+                <th>Colonia</th>
+                <th>Lic. para</th>
+                <th>Aranceles</th>
+                <th>Arancel Col.</th>
+                <th>Fecha Actualización</th>
+                <th>Estado</th>
+                <!--th>Gestión</th-->
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr ng-repeat = "item in licencias_cor_list">
+                <td>{{item.id_licencia}}</td>
+                <td>{{item.calle}}</td>
+                <td>{{item.colonia}}</td>
+                <td>
+                  {{item.tramite}} | 
+                  <p style="color:red"> {{item.obra_nueva     === "true" ? "Obra Nueva" : ""}}
+                  {{item.ampliacion     === "true" ? "Ampliación" : ""}}
+                  {{item.modificacion   === "true" ? "Modificación" : ""}}
+                  {{item.reparacion     === "true" ? "Reparación" : ""}}
+                  {{item.regularizacion === "true" ? "Regularización" : ""}}</p>
+                </td>
+                <td>{{item.total_ara | currency}}</td>
+                <td>{{item.arancel_col | currency}}</td>
+                <td>{{item.ultima_act}}</td>
+                <td>{{item.estatus}}</td>
+                <!--td>
+                  <upload>
+                  <a role="button" class="btn btn-outline-secondary btn-sm" href="#!add_docs" ng-click="set_session(item)" data-toggle="tooltip" data-placement="top" title="Cargar Requisitos">
+                    <svg class="bi bi-upload" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8zM5 4.854a.5.5 0 00.707 0L8 2.56l2.293 2.293A.5.5 0 1011 4.146L8.354 1.5a.5.5 0 00-.708 0L5 4.146a.5.5 0 000 .708z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M8 2a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 2z" clip-rule="evenodd"/>
+                    </svg>
+                  </a>
+                  <search>
+                  <button type="button" class="btn btn-outline-secondary btn-sm">
+                    <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                  <Solicitud>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="solicitud(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Solicitud">
+                    <svg class="bi bi-file-text" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                  <Aranceles de pago>
+                  <V E R   P D F>
+                  <a ng-if="item.is_per == '1'" role="button" class="btn btn-outline-secondary btn-sm" ng-click="arancel(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Aranceles">
+                    <svg class="bi bi-book" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M3.214 1.072C4.813.752 6.916.71 8.354 2.146A.5.5 0 0 1 8.5 2.5v11a.5.5 0 0 1-.854.354c-.843-.844-2.115-1.059-3.47-.92-1.344.14-2.66.617-3.452 1.013A.5.5 0 0 1 0 13.5v-11a.5.5 0 0 1 .276-.447L.5 2.5l-.224-.447.002-.001.004-.002.013-.006a5.017 5.017 0 0 1 .22-.103 12.958 12.958 0 0 1 2.7-.869zM1 2.82v9.908c.846-.343 1.944-.672 3.074-.788 1.143-.118 2.387-.023 3.426.56V2.718c-1.063-.929-2.631-.956-4.09-.664A11.958 11.958 0 0 0 1 2.82z"/>
+                      <path fill-rule="evenodd" d="M12.786 1.072C11.188.752 9.084.71 7.646 2.146A.5.5 0 0 0 7.5 2.5v11a.5.5 0 0 0 .854.354c.843-.844 2.115-1.059 3.47-.92 1.344.14 2.66.617 3.452 1.013A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.276-.447L15.5 2.5l.224-.447-.002-.001-.004-.002-.013-.006-.047-.023a12.582 12.582 0 0 0-.799-.34 12.96 12.96 0 0 0-2.073-.609zM15 2.82v9.908c-.846-.343-1.944-.672-3.074-.788-1.143-.118-2.387-.023-3.426.56V2.718c1.063-.929 2.631-.956 4.09-.664A11.956 11.956 0 0 1 15 2.82z"/>
+                    </svg>
+                  </a>
+                  <Orden de pago>
+                  <V E R   P D F>
+                  <a ng-if="item.is_der == '1'" role="button" class="btn btn-outline-secondary btn-sm" ng-click="orden(item.public_id)" data-toggle="tooltip" data-placement="top" title="PDF Orden de Pago">
+                    <svg class="bi bi-book" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M3.214 1.072C4.813.752 6.916.71 8.354 2.146A.5.5 0 0 1 8.5 2.5v11a.5.5 0 0 1-.854.354c-.843-.844-2.115-1.059-3.47-.92-1.344.14-2.66.617-3.452 1.013A.5.5 0 0 1 0 13.5v-11a.5.5 0 0 1 .276-.447L.5 2.5l-.224-.447.002-.001.004-.002.013-.006a5.017 5.017 0 0 1 .22-.103 12.958 12.958 0 0 1 2.7-.869zM1 2.82v9.908c.846-.343 1.944-.672 3.074-.788 1.143-.118 2.387-.023 3.426.56V2.718c-1.063-.929-2.631-.956-4.09-.664A11.958 11.958 0 0 0 1 2.82z"/>
+                      <path fill-rule="evenodd" d="M12.786 1.072C11.188.752 9.084.71 7.646 2.146A.5.5 0 0 0 7.5 2.5v11a.5.5 0 0 0 .854.354c.843-.844 2.115-1.059 3.47-.92 1.344.14 2.66.617 3.452 1.013A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.276-.447L15.5 2.5l.224-.447-.002-.001-.004-.002-.013-.006-.047-.023a12.582 12.582 0 0 0-.799-.34 12.96 12.96 0 0 0-2.073-.609zM15 2.82v9.908c-.846-.343-1.944-.672-3.074-.788-1.143-.118-2.387-.023-3.426.56V2.718c1.063-.929 2.631-.956 4.09-.664A11.956 11.956 0 0 1 15 2.82z"/>
+                    </svg>
+                  </a>
+                </td-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page level plugins -->
+  <!-- <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->

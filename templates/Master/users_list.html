@@ -1,0 +1,64 @@
+<!-- Page Heading  -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Usuarios</h1>
+  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i>Nuevo Usuario</a>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error"class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Listado de Usuarios</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Tipo Usuario</th>
+              <th>Fecha Registro</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Tipo Usuario</th>
+              <th>Fecha Registro</th>
+              <th>Estado</th>
+              <th>Gestión</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr ng-repeat = "item in users_list">
+              <td>
+                {{item.nombre}}
+                <label>{{item.departamento}}</label>
+              </td>
+              <td>{{item.correo}}</td>
+              <td>{{item.desc_tipo_usuario}}</td>
+              <td>{{item.fecha_registro}}</td>
+              <td>{{item.estado}}</td>
+              <td>Gestion</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page level plugins -->
+<!-- <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+
+<!-- Page level custom scripts -->
+<!-- <script src="../js/demo/datatables-demo.js"></script> -->

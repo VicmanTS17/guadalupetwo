@@ -1,0 +1,138 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4" ng-init="get_detalles_lic()">
+  <h6 class="h3 mb-0 text-gray-800">Detalles de licencia.</h6>
+  <h6>Folio. {{lic_data.id_licencia}}, {{lic_data.tramite}}</h6>
+  <div class="btn-group">
+    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Guardar
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="" ng-click="save_est(1)">Docs. con Observaciones</a>
+      <a class="dropdown-item" href="" ng-click="save_est(2)">Docs. Validados</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="" ng-click="save_est(3)">Pago Validado</a>
+      <a class="dropdown-item" href="" ng-click="save_est(4)">Licencia para Firma</a>
+      <!--a class="dropdown-item" href="" ng-click="save_est(5)">Licencia Autorizada</a-->
+    </div>
+  </div>
+</div>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <div ng-if="req_error" class="alert alert-{{kind}}" role="alert">
+    {{message}}
+  </div>
+  <!-- DataTales Example -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12 p-3">
+        <h6>Ubicación del predio</h6>
+        <div id="map"></div>
+        <button type="button" class="btn btn-primary" ng-click="actubic()">
+          Actualizar Ubicación
+        </button>
+        <img src="https://guadalupe.licenciaszac.net/public_files/user_assets/{{datoslic[0].path_mapa}}"
+          alt="no se encontro imagen" width="700px">
+      </div>
+
+      <div class="col-12 p-3 accordion" id="accordionExample">
+        <div class="card card border-info" ng-repeat="item_group in detalles_lic">
+          <div class="card-header" id="heading{{$index}}">
+            <h2 class="mb-0">
+              <button class="btn btn-block text-center text-black collapsed" type="button" data-toggle="collapse" data-target="#collapse{{$index}}" aria-expanded="false" aria-controls="collapse{{$index}}" ng-click="get_group_form(item_group)">{{item_group.nombre}}
+              </button>
+            </h2>
+          </div>
+          <div id="collapse{{$index}}" class="collapse" aria-labelledby="heading{{$index}}" data-parent="#accordionExample">
+            <div class="card-body">
+              <!--button type="button" class="btn btn-success btn-block" ng-click="update_group(form, item_group)">Guardar</button-->
+              <div class="alert alert-warning" role="alert">No olvides guardar antes de continuar.</div>
+              <form ng-if="item_group.public_id !== 'id_5ee7d14e6e4a79.01524533'"><!--gral datos-->
+                <div class="form-row">
+                  <!-- T E X T   I N P  U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '0'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input type="text" class="form-control" id="inputEmail4" ng-model="datosform[item.campo_db]" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- N U M B E R   I N P  U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '2'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input ng-if="item.public_id !== 'id_5ea3505b722463.97745423' && item.public_id !== 'id_5ea3457c2e3ba5.81865549'" type="number" min="0" step="0.01" class="form-control" id="inputEmail4" ng-model="datosform[item.campo_db]" onkeypress="return alpha(event)">
+                    <!--input suma mtrs grp desc obra-->
+                    <input ng-if="item.public_id === 'id_5ea3505b722463.97745423'" type="number" class="form-control" id="inputEmail4" ng-model="datosform[item.campo_db]" disabled onkeypress="return alpha(event)">
+                    <!--Vigencia en dias -->
+                    <input ng-if="item.public_id === 'id_5ea3505b727e44.80590698' || item.public_id === 'id_5ea3457c2e3ba5.81865549'" type="number" min="0" step="30" class="form-control" id="inputEmail4" placeholder="30, 60, 90..." ng-model="item.data" onkeypress="return alpha(event)">
+                 </div>
+                  <!--D A T E   I N P U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '3'">
+                    <label for="inputEmail4">{{item.nombre }}</label>
+                    <!--input gral-->
+                    <input type="date" class="form-control" id="input_date" ng-model="datosform[item.campo_db]" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- E M A I L   I N P U T-->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '4'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <!--input gral-->
+                    <input type="email" class="form-control" id="inputEmail4" ng-model="datosform[item.campo_db]" onkeypress="return alpha(event)">
+                  </div>
+                  <!-- T E X T   A R E A  -->
+                  <div class="form-group col-md-6" ng-repeat="item in form" ng-if="item.tipo_campo === '5'">
+                    <label for="inputEmail4">{{item.nombre}}</label>
+                    <textarea class="form-control" aria-label="With textarea" ng-model="datosform[item.campo_db]" onkeypress="return alpha(event)"></textarea>
+                  </div>
+                </div>
+              </form>
+              <!-- R A D I O  -   G R P .   L I C E N C I  A   P A R A -->
+              <div ng-if="item_group.public_id === 'id_5ee7d14e6e4a79.01524533'" class="form-check col-6" ng-repeat="item in form">
+                <input ng-if="item.tipo_campo === '1'" class="form-check-input" type="radio" name="formRadios" id="formRadios" value=true ng-model="datosform[item.campo_db]" ng-click='clear_model(form, item)'>
+                <label ng-if="item.tipo_campo === '1'" class="form-check-label" for="formRadios"> {{item.nombre}} </label>
+              </div>
+              <!-- C H E C K   B O X   -   G R P .   P E R M I S O  P A R A  ng-click='clear_model(form, item)'-->
+              <div ng-if="item_group.public_id === 'id_5ee7d14e6e4a79.01524005'" class="form-check col-6" ng-repeat="item in form">
+                <div class="form-check" ng-if="item.tipo_campo === '6'">
+                  <input class="form-check-input" type="checkbox" value="true" id="defaultCheck1" ng-model="datosform[item.campo_db]" >
+                  <label class="form-check-label" for="defaultCheck1"> {{item.nombre}} </label>
+                </div>
+              </div>
+              <button type="button" class="btn btn-success btn-block" ng-click="update_group(form, item_group)">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Previo lic-->
+      <button type="button" class="btn btn-info btn-block" ng-click="licencia(datoslic[0].public_id)">
+        PREV. LICENCIA
+      </button>
+    </div>
+    <!--Pagos div-->
+    <div class="card" ng-init="get_pagos()">
+      <div class="card-body">
+        <div ng-if="notif_pay" class="alert alert-{{kind}}" role="alert">
+          {{message}}
+        </div>
+        <div class="col-12" ng-repeat="item in pagos_list">
+          <form>
+            <p class="h6">{{item.pago_para == 0 ? '' : 'Comprobante de pago Derechos'}}</p>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="validationTextarea">Comentario - <small class="text-muted"><font color="red">{{item.estatus}}</font></small></label>
+                <textarea class="form-control" id="validationTextarea" ng-model="item.comentario" onkeypress="return alpha(event)"></textarea>
+                <button type="button" class="btn  btn-outline-success btn-sm btn-block" ng-click="add_coment_pay(item)">Guardar</button>
+              </div>
+              <div class="form-group col-md-4"><br><br>
+                <p class="h6">{{item.nombre}} </p>
+                <a href="{{item.path_file}}" target="_blank" class="btn btn-outline-info btn-sm btn-block" role="button" aria-pressed="true">Ver</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Core theme JS-->
+<script src="../../js/scripts.js"></script>
